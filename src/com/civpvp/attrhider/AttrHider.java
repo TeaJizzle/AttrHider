@@ -81,13 +81,14 @@ public class AttrHider extends JavaPlugin implements Listener {
 	    
 	    ProtocolLibrary.getProtocolManager().addPacketListener(
 	    	      new PacketAdapter(this, ListenerPriority.NORMAL, new PacketType[] { PacketType.Play.Server.ENTITY_METADATA }) {
-	    	      public void onPacketSending(PacketEvent event) {
+	    	      @SuppressWarnings({ "rawtypes", "unchecked" })
+				public void onPacketSending(PacketEvent event) {
 	    	        try {
 	    	          Player observer = event.getPlayer();
 	    	          StructureModifier entityModifer = event.getPacket().getEntityModifier(observer.getWorld());
 	    	          Entity entity = (Entity)entityModifer.read(0);
 	    	          if ((entity != null) && (observer != entity) && ((entity instanceof LivingEntity)) && 
-	    	            ((!(entity instanceof EnderDragon)) || (!(entity instanceof Wither))) && (
+	    	            (!(entity instanceof EnderDragon)) && (!(entity instanceof Wither)) && (
 	    	            (entity.getPassenger() == null) || (entity.getPassenger() != observer))) {
 	    	            event.setPacket(event.getPacket().deepClone());
 	    	            StructureModifier watcher = event.getPacket()
